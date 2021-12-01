@@ -1,9 +1,8 @@
 <?php
 
-declare(strict_types=1);
+namespace AMSGuitars\Infrastructure\Persistence\UserRepository;
 
-namespace AMSGuitars\Domain\Entities\User;
-
+use AMSGuitars\Domain\Entities\User\User;
 use AMSGuitars\Domain\ValueObjects\Collections\UserCollection;
 use AMSGuitars\Domain\ValueObjects\Identifiers\UserId;
 use AMSGuitars\Infrastructure\ValueObjects\Persistence\Limit;

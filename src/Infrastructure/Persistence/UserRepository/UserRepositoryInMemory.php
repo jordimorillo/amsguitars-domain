@@ -40,20 +40,11 @@ class UserRepositoryInMemory implements UserRepositoryInterface
 
     public function findCollection(SortOrder $sortOrder, Limit $limit = null): UserCollection
     {
-        $userCollection = new UserCollection();
-        $userCollection->sort($sortOrder->getColumn()->toString(), $sortOrder->getSortDirection()->getValue());
-
-        if($limit !== null) {
-            $startPosition = $limit->getOffset() * $limit->getTotalItems();
-            foreach($this->userCollection->getIterator() as $key => $intervention) {
-                if($key > $startPosition && $key <= $startPosition + $limit->getTotalItems()) {
-                    $userCollection->add($intervention);
-                }
-            }
-        } else {
-            $userCollection = $this->userCollection;
-        }
-
-        return $userCollection;
+        /** @var UserCollection $collection */
+        $collection = $this->userCollection->sort(
+            $sortOrder->getColumn()->toString(),
+            $sortOrder->getSortDirection()->getValue()
+        );
+        return $collection;
     }
 }

@@ -11,7 +11,7 @@ class Limit
     private int $offset;
     private int $totalItems;
 
-    public function yarn__construct(int $offset, int $totalItems)
+    public function __construct(int $offset, int $totalItems)
     {
         $this->validate($offset, $totalItems);
         $this->offset = $offset;
