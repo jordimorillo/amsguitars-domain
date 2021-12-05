@@ -12,6 +12,8 @@ use AMSGuitars\Domain\ValueObjects\Identifiers\PersonId;
 use AMSGuitars\Domain\ValueObjects\Identifiers\UserId;
 use AMSGuitars\Domain\ValueObjects\Password;
 use AMSGuitars\Domain\ValueObjects\Username;
+use AMSGuitars\Infrastructure\Adapters\User\UserAdapter;
+use AMSGuitars\Infrastructure\Adapters\User\UserCollectionAdapter;
 use AMSGuitars\Infrastructure\Exceptions\UserNotFound;
 use AMSGuitars\Infrastructure\Exceptions\UserRepositoryException;
 use AMSGuitars\Infrastructure\Persistence\Repository;
@@ -58,7 +60,7 @@ class UserRepositoryInMySQL implements UserRepositoryInterface, Repository
         if ($row === null) {
             throw new UserNotFound('User ' . $userId . ' not found');
         }
-        return $this->userFromRow($row);
+        return UserAdapter::fromRow($row);
     }
 
     public function findCollection(SortOrder $sortOrder, Limit $limit): UserCollection
@@ -72,21 +74,10 @@ class UserRepositoryInMySQL implements UserRepositoryInterface, Repository
             throw new UserRepositoryException('Failed while finding the user collection');
         }
         $result = $stmt->get_result();
-        $users = [];
-        while ($row = $result->fetch_assoc()) {
-            $users[] = $this->userFromRow($row);
+        $rows = [];
+        while($row = $result->fetch_assoc()) {
+            $rows[] = $row;
         }
-        return new UserCollection($users);
-    }
-
-    private function userFromRow(array $row): User
-    {
-        return new User(
-            new UserId($row['userId']),
-            new PersonId($row['personId']),
-            new Username($row['username']),
-            new Password($row['password']),
-            new Email($row['email'])
-        );
+        return UserCollectionAdapter::fromRows($rows);
     }
 }
