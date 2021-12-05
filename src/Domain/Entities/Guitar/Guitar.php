@@ -16,20 +16,17 @@ class Guitar implements Entity
     public GuitarId $guitarId;
     public PersonId $personId;
     public ModelId $modelId;
-    private PhotoCollection $photoCollection;
     private InterventionCollection $interventionCollection;
 
     public function __construct(
         GuitarId $guitarId,
         PersonId $personId,
         ModelId $modelId,
-        PhotoCollection $photoCollection,
         InterventionCollection $interventionCollection
     ) {
         $this->guitarId = $guitarId;
         $this->personId = $personId;
         $this->modelId = $modelId;
-        $this->photoCollection = $photoCollection;
         $this->interventionCollection = $interventionCollection;
     }
 
@@ -48,11 +45,6 @@ class Guitar implements Entity
         return $this->modelId;
     }
 
-    public function getPhotoCollection(): PhotoCollection
-    {
-        return $this->photoCollection;
-    }
-
     public function getInterventionCollection(): InterventionCollection
     {
         return $this->interventionCollection;
@@ -64,7 +56,6 @@ class Guitar implements Entity
             'guitarId' => $this->getGuitarId()->toString(),
             'personId' => $this->getPersonId()->toString(),
             'modelId' => $this->getModelId()->toString(),
-            'photoCollection' => $this->getPhotoCollection()->toIdentifiersJson(),
             'interventionCollection' => $this->getInterventionCollection()->toIdentifiersJson(),
         ];
     }

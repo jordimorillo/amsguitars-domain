@@ -61,7 +61,7 @@ class UserRepositoryInMySQL implements UserRepositoryInterface, Repository
         return $this->userFromRow($row);
     }
 
-    public function findCollection(SortOrder $sortOrder, Limit $limit = null): UserCollection
+    public function findCollection(SortOrder $sortOrder, Limit $limit): UserCollection
     {
         $stmt = $this->mysqli->prepare('SELECT * FROM users ORDER BY ? LIMIT ?,?');
         $stmt->bind_param('sii', $sortOrderValue, $limitStart, $limitEnd);

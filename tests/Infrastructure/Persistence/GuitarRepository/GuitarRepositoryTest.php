@@ -9,6 +9,8 @@ use AMSGuitars\Domain\ValueObjects\Collections\GuitarCollection;
 use AMSGuitars\Domain\ValueObjects\Identifiers\GuitarId;
 use AMSGuitars\Infrastructure\Exceptions\GuitarNotFound;
 use AMSGuitars\Infrastructure\Persistence\GuitarRepository\GuitarRepositoryInMemory;
+use AMSGuitars\Infrastructure\Persistence\GuitarRepositoryInMySQL;
+use AMSGuitars\Infrastructure\Persistence\MySQL;
 use AMSGuitars\Infrastructure\ValueObjects\Persistence\Column;
 use AMSGuitars\Infrastructure\ValueObjects\Persistence\Limit;
 use AMSGuitars\Infrastructure\ValueObjects\Persistence\SortDirection;
@@ -21,7 +23,8 @@ class GuitarRepositoryTest extends DatabaseTestCase
     public function dataProvider(): array
     {
         return [
-            'In memory' => [new GuitarRepositoryInMemory],
+            'In Memory' => [new GuitarRepositoryInMemory()],
+            'In MySQL' => [new GuitarRepositoryInMySQL(MySQL::getConnection())]
         ];
     }
 
@@ -62,37 +65,15 @@ class GuitarRepositoryTest extends DatabaseTestCase
     public function testCanFindACollection(GuitarRepositoryInterface $guitarRepository): void
     {
         $guitarCollection = new GuitarCollection();
-        for ($i = 0; $i <= 10; $i++) {
+        for ($i = 0; $i < 10; $i++) {
             $aGuitar = (new Guitars())->aGuitar();
             $guitarCollection->add($aGuitar);
             $guitarRepository->save($aGuitar);
         }
-        $findOrder = new SortOrder(new Column('guitarId'));
-        $guitarCollection->sort($findOrder->getColumn()->toString());
-        $obtainedCollection = $guitarRepository->findCollection($findOrder);
-        self::assertEquals($guitarCollection, $obtainedCollection);
-    }
-
-    /** @dataProvider dataProvider() */
-    public function testCanFindACollectionWithLimit(GuitarRepositoryInterface $guitarRepository): void
-    {
-        $guitarCollection = new GuitarCollection();
-        for ($i = 1; $i <= 10; $i++) {
-            $aGuitar = (new Guitars())->aGuitar();
-            $guitarCollection->add($aGuitar);
-            $guitarRepository->save($aGuitar);
-        }
-        $findLimit = new Limit(0, 2);
         $findOrder = new SortOrder(new Column('guitarId'), SortDirection::ASC());
-        $guitarCollection->sort($findOrder->getColumn()->toString());
-        $resultCollection = new GuitarCollection();
-        $startPosition = $findLimit->getOffset() * $findLimit->getTotalItems();
-        foreach($guitarCollection->getIterator() as $key => $guitar) {
-            if($key > $startPosition && $key <= $startPosition + $findLimit->getTotalItems()) {
-                $resultCollection->add($guitar);
-            }
-        }
+        $findLimit = new Limit();
+        $expectedCollection = $guitarCollection->sort($findOrder->getColumn()->toString(), $findOrder->getSortDirection()->getValue());
         $obtainedCollection = $guitarRepository->findCollection($findOrder, $findLimit);
-        self::assertEquals($resultCollection, $obtainedCollection);
+        self::assertEquals($expectedCollection, $obtainedCollection);
     }
 }

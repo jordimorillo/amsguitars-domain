@@ -14,5 +14,5 @@ interface GuitarRepositoryInterface
 {
     public function save(Guitar $guitar): void;
     public function findById(GuitarId $guitarId): Guitar;
-    public function findCollection(SortOrder $order, Limit $limit = null): GuitarCollection;
+    public function findCollection(SortOrder $order, Limit $limit): GuitarCollection;
 }

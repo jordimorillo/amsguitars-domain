@@ -11,7 +11,7 @@ class Limit
     private int $offset;
     private int $totalItems;
 
-    public function __construct(int $offset, int $totalItems)
+    public function __construct(int $offset = 0, int $totalItems = 10)
     {
         $this->validate($offset, $totalItems);
         $this->offset = $offset;

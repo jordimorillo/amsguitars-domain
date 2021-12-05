@@ -2,23 +2,16 @@ version: '3'
 
 services:
   mysql:
-    image: mysql:5.6
-    container_name: docker-mysql
-    environment:
-      MYSQL_DATABASE: amsguitars
-      MYSQL_USER: amsguitars
-      MYSQL_PASSWORD: ams123guitars%
-      MYSQL_ROOT_PASSWORD: ams123guitars%%%
+    image: mysql:5.7
+    container_name: mysql
+    env_file:
+      - .env
     ports:
       - "3306:3306"
     restart: always
+    networks:
+      - app-network
 
-  web:
-    image: php:7.3-apache
-    container_name: docker-php
-    ports:
-      - "80:80"
-    volumes:
-      - ./www:/var/www/html
-    links:
-      - mysql
+networks:
+  app-network:
+    driver: bridge

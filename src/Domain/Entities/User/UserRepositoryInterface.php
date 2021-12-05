@@ -15,5 +15,5 @@ interface UserRepositoryInterface
 
     public function findById(UserId $userId): User;
 
-    public function findCollection(SortOrder $sortOrder, Limit $limit = null): UserCollection;
+    public function findCollection(SortOrder $sortOrder, Limit $limit): UserCollection;
 }

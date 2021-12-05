@@ -8,7 +8,10 @@ use AMSGuitars\Domain\Entities\Entity;
 use AMSGuitars\Domain\ValueObjects\Collections\PhotoCollection;
 use AMSGuitars\Domain\ValueObjects\Comments;
 use AMSGuitars\Domain\ValueObjects\Diagnostic;
+use AMSGuitars\Domain\ValueObjects\Identifiers\GuitarId;
 use AMSGuitars\Domain\ValueObjects\Identifiers\InterventionId;
+use AMSGuitars\Domain\ValueObjects\Identifiers\OrderId;
+use AMSGuitars\Domain\ValueObjects\Identifiers\PersonId;
 use AMSGuitars\Domain\ValueObjects\InterventionStatus;
 
 class Intervention implements Entity
@@ -18,9 +21,11 @@ class Intervention implements Entity
     private Diagnostic $diagnostic;
     private Comments $comments;
     public InterventionStatus $interventionStatus;
+    private OrderId $orderId;
 
     public function __construct(
         InterventionId $interventionId,
+        OrderId $orderId,
         InterventionStatus $interventionStatus,
         Diagnostic $diagnostic,
         Comments $comments,
@@ -31,11 +36,17 @@ class Intervention implements Entity
         $this->diagnostic = $diagnostic;
         $this->comments = $comments;
         $this->photoCollection = $photoCollection;
+        $this->orderId = $orderId;
     }
 
     public function getInterventionId(): InterventionId
     {
         return $this->interventionId;
+    }
+
+    public function getOrderId(): OrderId
+    {
+        return $this->orderId;
     }
 
     public function getInterventionStatus(): InterventionStatus

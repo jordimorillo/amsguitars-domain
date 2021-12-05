@@ -38,7 +38,7 @@ class UserRepositoryInMemory implements UserRepositoryInterface
         throw new UserNotFound('User with ID '.$userId.' does not exist');
     }
 
-    public function findCollection(SortOrder $sortOrder, Limit $limit = null): UserCollection
+    public function findCollection(SortOrder $sortOrder, Limit $limit): UserCollection
     {
         /** @var UserCollection $collection */
         $collection = $this->userCollection->sort(

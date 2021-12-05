@@ -40,20 +40,8 @@ class GuitarRepositoryInMemory implements GuitarRepositoryInterface
 
     public function findCollection(SortOrder $order, Limit $limit = null): GuitarCollection
     {
-        $guitarCollection = new GuitarCollection();
-        $guitarCollection->sort($order->getColumn()->toString(), $order->getSortDirection()->getValue());
-
-        if($limit !== null) {
-            $startPosition = $limit->getOffset() * $limit->getTotalItems();
-            foreach($this->guitarCollection->getIterator() as $key => $guitar) {
-                if($key > $startPosition && $key <= $startPosition + $limit->getTotalItems()) {
-                    $guitarCollection->add($guitar);
-                }
-            }
-        } else {
-            $guitarCollection = $this->guitarCollection;
-        }
-
-        return $guitarCollection;
+        /** @var GuitarCollection $obtainedGuitarCollection */
+        $obtainedGuitarCollection = $this->guitarCollection->sort($order->getColumn()->toString(), $order->getSortDirection()->getValue());
+        return $obtainedGuitarCollection;
     }
 }

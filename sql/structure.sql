@@ -14,3 +14,18 @@ alter table users
     add constraint users_pk
         primary key (userId);
 
+create table guitars
+(
+    guitarId varchar(255) null,
+    personId varchar(255) not null,
+    modelId varchar(255) not null,
+    interventionCollection json not null
+);
+
+create unique index guitars_guitarId_uindex
+    on guitars (guitarId);
+
+alter table guitars
+    add constraint guitars_pk
+        primary key (guitarId);
+
